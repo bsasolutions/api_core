@@ -24,43 +24,51 @@ class EvolutionService
             throw new \Exception('Instance not informed');
         }
 
+        try {
+            switch ($action) {
+                case 'create':
+                    return $this->client->createInstance([
+                        'instanceName' => $instance,
+                        'token' => '',
+                        'qrcode' => true,
+                        'webhook' => $params['webhook'] ?? '',
+                        'webhookByEvents' => false,
+                        'events' => [
+                            'QRCODE_UPDATED',
+                            'MESSAGES_SET',
+                            'MESSAGES_UPSERT',
+                            'MESSAGES_UPDATE',
+                            'MESSAGES_DELETE',
+                            'SEND_MESSAGE',
+                            'CONNECTION_UPDATE',
+                        ],
+                    ])->json();
 
-        switch ($action) {
-            case 'create':
-                return $this->client->createInstance([
-                    'instanceName' => $instance,
-                    'token' => '',
-                    'qrcode' => true,
-                    'webhook' => $params['webhook'] ?? '',
-                    'webhookByEvents' => false,
-                    'events' => [
-                        'QRCODE_UPDATED',
-                        'MESSAGES_SET',
-                        'MESSAGES_UPSERT',
-                        'MESSAGES_UPDATE',
-                        'MESSAGES_DELETE',
-                        'SEND_MESSAGE',
-                        'CONNECTION_UPDATE',
-                    ],
-                ])->json();
+                case 'connect':
+                    return $this->client->connectInstance($instance)->json();
 
-            case 'connect':
-                return $this->client->connectInstance($instance)->json();
+                case 'restart':
+                    return $this->client->restartInstance($instance)->json();
 
-            case 'restart':
-                return $this->client->restartInstance($instance)->json();
+                case 'status':
+                    return $this->client->statusInstance($instance)->json();
 
-            case 'status':
-                return $this->client->statusInstance($instance)->json();
+                case 'logout':
+                    return $this->client->logoutInstance($instance)->json();
 
-            case 'logout':
-                return $this->client->logoutInstance($instance)->json();
+                case 'delete':
+                    return $this->client->deleteInstance($instance)->json();
 
-            case 'delete':
-                return $this->client->deleteInstance($instance)->json();
-
-            case 'send':
-                return $this->sendMessage($params);
+                case 'send':
+                    return $this->sendMessage($params);
+            }
+        } catch (\Illuminate\Http\Client\RequestException $e) {
+            $status = $e->response?->status() ?? null;
+            if ($status === 404) {
+                //throw new \RuntimeException("Instance $instance not found", 404, $e);
+                throw new \RuntimeException(__('messages.instance_not_found', ['instance' => $instance]), 404, $e);
+            }
+            throw new \RuntimeException($e->getMessage(), $status ?? 500, $e);
         }
 
         return [];
@@ -82,16 +90,26 @@ class EvolutionService
             return ['error' => 'Invalid phone number'];
         }
 
-        return $this->client->sendMessageTxt($instance, [
-            'number' => $this->addCountryCode($phone, $countryCode),
-            'options' => [
-                'delay' => 1200,
-                'presence' => 'composing',
-            ],
-            'textMessage' => [
-                'text' => $message
-            ],
-        ])->json();
+        try {
+            $response = $this->client->sendMessageTxt($instance, [
+                'number' => $this->addCountryCode($phone, $countryCode),
+                'options' => [
+                    'delay' => 1200,
+                    'presence' => 'composing',
+                ],
+                'textMessage' => [
+                    'text' => $message
+                ],
+            ]);
+
+            return $response->json();
+        } catch (\Illuminate\Http\Client\RequestException $e) {
+            $status = $e->response?->status() ?? null;
+            if ($status === 404) {
+                throw new \RuntimeException("Instance $instance not found", 404, $e);
+            }
+            throw new \RuntimeException($e->getMessage(), $status ?? 500, $e);
+        }
     }
 
     //Validate phone number by country.

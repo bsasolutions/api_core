@@ -18,11 +18,20 @@ class EvolutionController extends ApiController
     // Endpoints: create, connect, restart, status, logout, delete, send
     public function action(Request $request)
     {
-        //$action = $request->action;
-        //$data = $this->service->handleAction($action, $request->all());
-        $data = $this->service->handleAction($request->action, $request->all());
-
-        return response()->json($data, 200);
+        try {
+            $data = $this->service->handleAction($request->action, $request->all());
+            return $this->successResponse('Success', 200, [], $data);
+        } catch (\RuntimeException $e) {
+            return $this->errorResponse(
+                $e->getMessage(),
+                $e->getCode() ?: 500
+            );
+        } catch (\Exception $e) {
+            return $this->errorResponse(
+                'Unexpected error: ' . $e->getMessage(),
+                500
+            );
+        }
     }
 
     // Endpoint webhook

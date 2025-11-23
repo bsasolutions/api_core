@@ -19,12 +19,9 @@ return [
     //. Application Timezone
     'timezone' => 'America/Sao_Paulo', //'UTC',
     //. Application Locale Configuration
-    'locale' => env('APP_LOCALE', 'br'),
-    'fallback_locale' => env('APP_FALLBACK_LOCALE', 'br'),
-    'faker_locale' => env('APP_FAKER_LOCALE', 'pt_BR'),
-    //'locale' => 'br',
-    //'fallback_locale' => 'br',
-    //'faker_locale' => 'pt_BR',
+    'locale' => env('APP_LOCALE', 'en'),
+    'fallback_locale' => env('APP_FALLBACK_LOCALE', 'en'),
+    'faker_locale' => env('APP_FAKER_LOCALE', 'en_US'),
     //. Encryption Key
     'cipher' => 'AES-256-CBC',
     'key' => env('APP_KEY'),
