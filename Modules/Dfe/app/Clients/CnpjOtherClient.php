@@ -8,8 +8,6 @@ use App\Clients\BaseClient;
 use Illuminate\Http\Client\PendingRequest;
 use Modules\Dfe\App\Contracts\CnpjProviderInterface;
 
-//use Illuminate\Http\Client\Response;
-
 class CnpjOtherClient extends BaseClient implements CnpjProviderInterface
 {
 
@@ -20,38 +18,23 @@ class CnpjOtherClient extends BaseClient implements CnpjProviderInterface
 
     protected function getClient(): PendingRequest
     {
+        //! Example with Headers directly: return $this->getHttpInstance()->withHeaders(['apikey' => $this->apiKey,'Content-Type' => 'application/json',]);
+        //! Example using a parameter in BaseClient: return $this->getHttpInstance([''apikey' => $this->apiKey, 'Content-Type' => 'application/json',])->withToken(config('services.other.token'));
         return $this->getHttpInstance()
             ->withToken(config('services.other.token'));
     }
 
-
-    /*protected function getClient(): PendingRequest
-    {
-        return $this->getHttpInstance()
-            ->baseUrl($this->baseUrl)
-            ->withHeaders([
-                'apikey' => $this->apiKey,
-                'Content-Type' => 'application/json',
-            ]);
-    }*/
-
-
     public function fetch(string $cnpj): array
     {
+        return [
+            'base_url' => $this->baseUrl,
+            'token' => config('services.acbr.token'),
+            'cnpj' => $cnpj
+        ];
+
+        //! Example using dynamic baseUrl: $this->setBaseUrl($baseUrl);
         return $this->getClient()
             ->get("/cnpj/{$cnpj}")
             ->json();
     }
-
-    /*public function consultar(string $cnpj): array
-    {
-        $url = "https://prod.other.api.br/cnpj/{$cnpj}";
-
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Authorization' => 'Bearer ' . config('services.other.token'),
-        ])->get($url);
-
-        return $response->json();
-    }*/
 }

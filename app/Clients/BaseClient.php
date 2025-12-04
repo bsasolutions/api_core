@@ -14,9 +14,15 @@ abstract class BaseClient
 
     public function __construct(protected string $baseUrl) {}
 
-    protected function getHttpInstance(): PendingRequest
+    public function setBaseUrl(string $url): void
+    {
+        $this->baseUrl = $url;
+    }
+
+    protected function getHttpInstance(array $headers = []): PendingRequest
     {
         $instance = Http::baseUrl($this->baseUrl)
+            ->withHeaders($headers)
             ->acceptJson()
             ->throw()
             ->retry(

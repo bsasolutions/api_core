@@ -8,11 +8,8 @@ use App\Clients\BaseClient;
 use Illuminate\Http\Client\PendingRequest;
 use Modules\Dfe\App\Contracts\CnpjProviderInterface;
 
-//use Illuminate\Http\Client\Response;
-
 class CnpjAcbrClient extends BaseClient implements CnpjProviderInterface
 {
-
     public function __construct()
     {
         parent::__construct(config('services.acbr.base_url'));
@@ -24,34 +21,16 @@ class CnpjAcbrClient extends BaseClient implements CnpjProviderInterface
             ->withToken(config('services.acbr.token'));
     }
 
-
-    /*protected function getClient(): PendingRequest
-    {
-        return $this->getHttpInstance()
-            ->baseUrl($this->baseUrl)
-            ->withHeaders([
-                'apikey' => $this->apiKey,
-                'Content-Type' => 'application/json',
-            ]);
-    }*/
-
-
     public function fetch(string $cnpj): array
     {
+        return [
+            'base_url' => $this->baseUrl,
+            'token' => config('services.acbr.token'),
+            'cnpj' => $cnpj
+        ];
+
         return $this->getClient()
             ->get("/cnpj/{$cnpj}")
             ->json();
     }
-
-    /*public function consultar(string $cnpj): array
-    {
-        $url = "https://prod.acbr.api.br/cnpj/{$cnpj}";
-
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Authorization' => 'Bearer ' . config('services.acbr.token'),
-        ])->get($url);
-
-        return $response->json();
-    }*/
 }

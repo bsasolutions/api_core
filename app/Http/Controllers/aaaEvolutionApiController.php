@@ -1,6 +1,6 @@
 <?php
 //. IDEIXA PARA UTILIZAR O API GATEWAY NO WEB PANEL
-namespace App\Http\Controllers;
+/*namespace App\Http\Controllers;
 
 use App\Models\Attendance;
 use App\Models\Company;
@@ -155,3 +155,4 @@ class OldController extends Controller
         return $response->json();
     }
 }
+*/
