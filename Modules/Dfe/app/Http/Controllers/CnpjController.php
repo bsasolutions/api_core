@@ -15,9 +15,16 @@ class CnpjController extends ApiController
 
     public function show(Request $request, string $cnpj, CnpjService $service)
     {
-        $environment = $request->header('X-Environment', 'homolog');
+        $environment = $request->header('X-Env', 'homolog');
         $provider    = $request->header('X-Provider', null);
 
-        return $service->fetch($cnpj, $provider, $environment);
+        $data = $service->fetch($cnpj, $provider, $environment);
+
+        return $this->successResponse(
+            'CNPJ lookup completed successfully.',
+            200,
+            [],
+            $data
+        );
     }
 }

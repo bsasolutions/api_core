@@ -15,7 +15,9 @@ class TestController extends ApiController
         $payload = JWTAuth::getPayload($token);
         //!user_id;company;sys_servers_id;sys_groups_id;sys_packages_id;sys_profiles_id
         $cfg = explode(';', Crypt::decryptString($payload->get('cfg')));*/
-        return $this->successResponse('dfe/test - index', 200);
+        //return $this->successResponse('dfe/test - index', 200);
+
+        return $this->successResponse('Test ok', 200);
     }
 
     public function show($id)
