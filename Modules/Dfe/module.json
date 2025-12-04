@@ -1,0 +1,11 @@
+{
+    "name": "Dfe",
+    "alias": "dfe",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Dfe\\app\\Providers\\DfeServiceProvider"
+    ],
+    "files": []
+}

@@ -1,7 +1,7 @@
 {
     "name": "bsa/api-gateway",
     "type": "project",
-    "description": "Gateway for external integrations (messages, payments, delivery)",
+    "description": "Gateway for external integrations (messages, payments, delivery, docs, etc)",
     "keywords": [
         "gateway",
         "integrations",

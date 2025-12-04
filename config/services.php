@@ -35,4 +35,19 @@ return [
         ],
     ],
 
+    //custom
+    'dfe' => [
+        'provider' => env('DFE_PROVIDER', 'acbr'),
+    ],
+
+    'acbr' => [
+        'base_url' => env('ACBR_BASE_URL'),
+        'token' => env('ACBR_TOKEN'),
+    ],
+
+    'other' => [
+        'base_url' => env('OTHER_BASE_URL'),
+        'token' => env('OTHER_TOKEN'),
+    ],
+
 ];
