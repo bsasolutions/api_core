@@ -13,7 +13,7 @@ class CnpjOtherClient extends BaseClient implements CnpjProviderInterface
 
     public function __construct()
     {
-        parent::__construct(config('services.other.base_url'));
+        parent::__construct(config('dfe.other.base_url'));
     }
 
     protected function getClient(): PendingRequest
@@ -21,14 +21,21 @@ class CnpjOtherClient extends BaseClient implements CnpjProviderInterface
         //! Example with Headers directly: return $this->getHttpInstance()->withHeaders(['apikey' => $this->apiKey,'Content-Type' => 'application/json',]);
         //! Example using a parameter in BaseClient: return $this->getHttpInstance([''apikey' => $this->apiKey, 'Content-Type' => 'application/json',])->withToken(config('services.other.token'));
         return $this->getHttpInstance()
-            ->withToken(config('services.other.token'));
+            ->withToken(config('dfe.other.token'));
     }
 
     public function fetch(string $cnpj): array
     {
+        //! Return test data
         return [
+            'name' => config('dfe.name'),
+            'dfe.acbr.prod.base_url' => config('dfe.acbr.prod.base_url'),
+            'dfe.acbr.prod.token' => config('dfe.acbr.prod.token'),
+            'dfe.acbr.homolog.base_url' => config('dfe.acbr.homolog.base_url'),
+            'dfe.other.base_url' => config('dfe.other.base_url'),
+            //
             'base_url' => $this->baseUrl,
-            'token' => config('services.acbr.token'),
+            'token' => config('dfe.acbr.prod.token'),
             'cnpj' => $cnpj
         ];
 

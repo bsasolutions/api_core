@@ -8,7 +8,7 @@ use Modules\Dfe\app\Clients\CnpjOtherClient;
 
 class CnpjClientFactory
 {
-    public function make(string $provider): CnpjProviderInterface
+    public function make(?string $provider = null): CnpjProviderInterface
     {
         return match ($provider) {
             'acbr' => app(CnpjAcbrClient::class),

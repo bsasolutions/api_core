@@ -15,7 +15,6 @@ class CnpjController extends ApiController
 
     public function show(Request $request, string $cnpj, CnpjService $service)
     {
-        //return $service->fetch($cnpj, $request->input('provider'));
-        return $this->successResponse('dfe/cnpj - index' . $cnpj . $request->input('provider'), 200);
+        return $service->fetch($cnpj, $request->query('provider'));
     }
 }

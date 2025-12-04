@@ -8,7 +8,7 @@ class CnpjService
 {
     public function __construct(private CnpjClientFactory $factory) {}
 
-    public function fetch(string $cnpj, string $provider): array
+    public function fetch(string $cnpj, ?string $provider = null): array
     {
         return $this->factory->make($provider)->fetch($cnpj);
     }

@@ -12,23 +12,18 @@ class CnpjAcbrClient extends BaseClient implements CnpjProviderInterface
 {
     public function __construct()
     {
-        parent::__construct(config('services.acbr.base_url'));
+        parent::__construct(config('dfe.acbr.prod.base_url'));
     }
 
     protected function getClient(): PendingRequest
     {
         return $this->getHttpInstance()
-            ->withToken(config('services.acbr.token'));
+            ->withToken(config('dfe.acbr.prod.token'));
     }
 
     public function fetch(string $cnpj): array
     {
-        return [
-            'base_url' => $this->baseUrl,
-            'token' => config('services.acbr.token'),
-            'cnpj' => $cnpj
-        ];
-
+        return ["buscar em acbr"];
         return $this->getClient()
             ->get("/cnpj/{$cnpj}")
             ->json();
