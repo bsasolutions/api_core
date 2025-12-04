@@ -30,12 +30,9 @@ class CnpjOtherClient extends BaseClient implements CnpjProviderInterface
         return [
             'name' => config('dfe.name'),
             'dfe.acbr.prod.base_url' => config('dfe.acbr.prod.base_url'),
-            'dfe.acbr.prod.token' => config('dfe.acbr.prod.token'),
             'dfe.acbr.homolog.base_url' => config('dfe.acbr.homolog.base_url'),
-            'dfe.other.base_url' => config('dfe.other.base_url'),
-            //
-            'base_url' => $this->baseUrl,
-            'token' => config('dfe.acbr.prod.token'),
+            'dfe.other.base_url' => $this->baseUrl,
+            'dfe.other.token' => config('dfe.other.token'),
             'cnpj' => $cnpj
         ];
 

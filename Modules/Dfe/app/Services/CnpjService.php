@@ -8,8 +8,8 @@ class CnpjService
 {
     public function __construct(private CnpjClientFactory $factory) {}
 
-    public function fetch(string $cnpj, ?string $provider = null): array
+    public function fetch(string $cnpj, ?string $provider = null, string $environment = 'homolog'): array
     {
-        return $this->factory->make($provider)->fetch($cnpj);
+        return $this->factory->make($provider, $environment)->fetch($cnpj);
     }
 }
