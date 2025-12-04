@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Modules\Dfe\App\Clients;
+namespace Modules\Dfe\app\Clients;
 
 use App\Clients\BaseClient;
 use Illuminate\Http\Client\PendingRequest;
-use Modules\Dfe\App\Contracts\CnpjProviderInterface;
+use Modules\Dfe\app\Contracts\CnpjProviderInterface;
 
 class CnpjOtherClient extends BaseClient implements CnpjProviderInterface
 {

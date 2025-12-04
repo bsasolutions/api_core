@@ -1,8 +1,8 @@
 <?php
 
-namespace Modules\Dfe\App\Services;
+namespace Modules\Dfe\app\Services;
 
-use Modules\Dfe\App\Factories\CnpjClientFactory;
+use Modules\Dfe\app\Factories\CnpjClientFactory;
 
 class CnpjService
 {

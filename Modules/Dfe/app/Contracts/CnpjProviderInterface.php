@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Dfe\App\Contracts;
+namespace Modules\Dfe\app\Contracts;
 
 interface CnpjProviderInterface
 {

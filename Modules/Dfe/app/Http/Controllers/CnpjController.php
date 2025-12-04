@@ -1,10 +1,10 @@
 <?php
 
-namespace Modules\Dfe\App\Http\Controllers;
+namespace Modules\Dfe\app\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController;
-use Modules\Dfe\App\Services\CnpjService;
+use Modules\Dfe\app\Services\CnpjService;
 
 class CnpjController extends ApiController
 {
