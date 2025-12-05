@@ -3,16 +3,17 @@
 namespace App\Traits;
 
 use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Support\Facades\Lang;
 
 trait ApiResponseTrait
 {
     /*
     Field	    Description	        Example
-    message	    mensagem simples	Consulta realizada com sucesso.
-    status	    código HTTP	        200, 201, 400, 404
-    meta	    detalhes extras	    provider, ambiente, paginação
-    data	    dados principais    dados do CNPJ
-    errors	    erros detalhados    causas, validações, respostas do provider
+    message	    Message text	   	Invalid or not found
+    status	    HTTP code	        200, 201, 400, 404
+    meta	    Details	            provider, pagination
+    data	    Data 	            data, list, object
+    errors	    Errors              errors, details
     */
     public function successResponse(string|array $message, int $status = 200, array $meta = [], mixed $data = [])
     {
@@ -38,27 +39,63 @@ trait ApiResponseTrait
 
     private function formatMessage(string|array $message): string
     {
-        // Array: [ 'lang.key', ['placeholders_key' => 'placeholders_value'] ]
-        // Example:
-        // controller: successResponse(['lang.success_cnpj', ['cnpj' => 123]]);
-        // lang: 'success_cnpj' => 'CNPJ :cnpj cadastrado com sucesso',
-        // translation: CNPJ 123 cadastrado com sucesso
+        // Note: core.base.welcome -> core/base.welcome
+        // Auto generate key: core.base.welcome
+        if ($message === 'auto' || (is_array($message) && $message[0] === 'auto')) {
+            $uri    = request()->route()->uri();
+            $uri = preg_replace('/\{.*?\}/', '', $uri);
+            $uri = trim($uri, '/');
+            $method = request()->route()->getActionMethod();
+            $key    = str_replace('/', '.', $uri) . '.' . $method;
+
+            $placeholders = is_array($message) ? ($message[1] ?? []) : [];
+            if (($placeholders['route'] ?? null) === ':route') {
+                $placeholders['route'] = $key;
+            }
+
+            if (Lang::has($key)) {
+                $key = preg_replace('/\./', '/', $key, 1);
+                return __($key, $placeholders);
+            }
+
+            return $key . $this->formatPlaceholdersFallback($placeholders);
+        }
+
+        // Array: ['core.base.welcome', ['name' => 'John']]
         if (is_array($message)) {
             [$key, $placeholders] = $message + [null, []];
 
             if (is_string($key)) {
-                return __($key, $placeholders);
+                if (Lang::has($key)) {
+                    $key = preg_replace('/\./', '/', $key, 1);
+                    return __($key, $placeholders);
+                }
+
+                return $key . $this->formatPlaceholdersFallback($placeholders);
             }
 
             return (string) json_encode($message, JSON_UNESCAPED_UNICODE);
         }
 
-        // String type lang.key → Example: successResponse('lang.success_cnpj');
-        if ((str_contains($message, '.')) && (!str_contains($message, ' ')) && (preg_match('/^[a-z0-9._-]+$/', $message))) {
+        // String lang.key: "core.base.welcome"
+        if ((str_contains($message, '.')) && (!str_contains($message, ' ')) && (preg_match('/^[a-z0-9._\/-]+$/i', $message))) {
+            $message = preg_replace('/\./', '/', $message, 1);
             return __($message);
         }
 
-        // String and not lang.key → Example: successResponse('Cadastrado com sucesso');
+        // String text: "Welcome John"
         return $message;
+    }
+
+    private function formatPlaceholdersFallback(array $placeholders): string
+    {
+        if (empty($placeholders)) return '';
+
+        $parts = [];
+        foreach ($placeholders as $k => $v) {
+            $parts[] = "$k: $v";
+        }
+
+        return ' (' . implode(', ', $parts) . ')';
     }
 }

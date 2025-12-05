@@ -10,21 +10,16 @@ class CnpjController extends ApiController
 {
     public function index()
     {
-        return $this->successResponse('dfe/cnpj - index', 200);
+        return $this->successResponse(['auto', ['route' => ':route']], 200);
     }
 
     public function show(Request $request, string $cnpj, CnpjService $service)
     {
-        $environment = $request->header('X-Env', 'homolog');
-        $provider    = $request->header('X-Provider', null);
+        $environment = $request->header('X-Env');
+        $provider    = $request->header('X-Provider');
 
         $data = $service->fetch($cnpj, $provider, $environment);
 
-        return $this->successResponse(
-            'CNPJ lookup completed successfully.',
-            200,
-            [],
-            $data
-        );
+        return $this->successResponse('dfe.cnpj.success', 200, [], $data);
     }
 }
