@@ -12,7 +12,7 @@ class CnpjClientFactory
 {
     protected array $requiredKeysMap = [
         'acbr'  => ['base_url', 'client_id', 'client_secret'],
-        'other' => ['base_url'],
+        'other' => ['base_url', 'client_id'],
     ];
 
     public function make(?string $provider = null, ?string $environment = null): CnpjProviderInterface

@@ -27,24 +27,24 @@ return Application::configure(basePath: dirname(__DIR__))
             ], $e->getStatusCode());
         });
 
+        // Filesystem permission errors
+        $exceptions->renderable(function (\Throwable $e, $request) {
+            return (new \App\Exceptions\Renderers\FilesystemExceptionRenderer())
+                ->render($e, $request);
+        });
+
         // Fallback custom
         $exceptions->renderable(function (\Throwable $e, $request) {
-            if ($e instanceof HttpExceptionInterface) {
-                return null; // deixa o handler acima responder
-            }
 
             if ($e instanceof \App\Exceptions\ApiException) {
-                return null; // deixa o handler acima responder
+                return null;
+            }
+
+            if ($e instanceof HttpExceptionInterface) {
+                return null;
             }
 
             return (new \App\Exceptions\Renderers\FallbackExceptionRenderer())
                 ->render($e, $request);
-        });
-
-        // Fallback 500
-        $exceptions->renderable(function (\Throwable $e, $request) {
-            return response()->json([
-                'message' => $e->getMessage(),
-            ], 500);
         });
     })->create();
