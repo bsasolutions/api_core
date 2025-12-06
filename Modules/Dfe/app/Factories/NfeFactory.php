@@ -2,29 +2,26 @@
 
 namespace Modules\Dfe\app\Factories;
 
-use Modules\Dfe\app\Contracts\CnpjProviderInterface;
-use Modules\Dfe\app\Clients\CnpjAcbrClient;
-use Modules\Dfe\app\Clients\CnpjOtherClient;
+use Modules\Dfe\app\Clients\Acbr\NfeClient as AcbrNfeClient;
+use Modules\Dfe\app\Contracts\NfeClientInterface;
 use Modules\Dfe\app\Services\Auth\AcbrAuthService;
 use App\Exceptions\ApiException;
 
-class CnpjClientFactory
+class NfeFactory
 {
     protected array $requiredKeysMap = [
         'acbr'  => ['base_url', 'client_id', 'client_secret'],
-        'other' => ['base_url', 'token'],
     ];
 
-    public function make(?string $provider = null, ?string $environment = null): CnpjProviderInterface
+    public function make(?string $provider, ?string $environment): NfeClientInterface
     {
-
         $provider = $provider ?: 'acbr';
         $environment = $environment ?: 'homolog';
         $config = config("dfe.$provider.$environment");
 
         if (!$config || !is_array($config)) {
             throw new ApiException(
-                ['dfe.cnpj.provider_config_not_found', ['provider' => $provider, 'environment' => $environment]],
+                ['dfe.nfe.provider_config_not_found', ['provider' => $provider, 'environment' => $environment]],
                 400
             );
         }
@@ -33,15 +30,15 @@ class CnpjClientFactory
         foreach ($requiredKeys as $key) {
             if (!array_key_exists($key, $config) || $config[$key] === null || $config[$key] === '') {
                 throw new ApiException(
-                    ['dfe.cnpj.provider_config_missing_key', ['provider' => $provider, 'environment' => $environment, 'key' => $key]],
+                    ['dfe.nfe.provider_config_missing_key', ['provider' => $provider, 'environment' => $environment, 'key' => $key]],
                     400
                 );
             }
         }
 
         return match ($provider) {
-            'acbr' => new CnpjAcbrClient($environment, app(AcbrAuthService::class)),
-            'other' => new CnpjOtherClient($environment),
+            'acbr' => new AcbrNfeClient($environment, app(AcbrAuthService::class)),
+            default => throw new ApiException(['dfe.nfe.provider_not_supported'], 400)
         };
     }
 }

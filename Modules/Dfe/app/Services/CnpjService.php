@@ -2,11 +2,11 @@
 
 namespace Modules\Dfe\app\Services;
 
-use Modules\Dfe\app\Factories\CnpjClientFactory;
+use Modules\Dfe\app\Factories\CnpjFactory;
 
 class CnpjService
 {
-    public function __construct(private CnpjClientFactory $factory) {}
+    public function __construct(private CnpjFactory $factory) {}
 
     public function fetch(string $cnpj, ?string $provider = null, ?string $environment = null): array
     {

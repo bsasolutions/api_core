@@ -2,16 +2,19 @@
 
 declare(strict_types=1);
 
-namespace Modules\Dfe\app\Clients;
+namespace Modules\Dfe\app\Clients\Acbr;
 
 use App\Clients\BaseClient;
 use Modules\Dfe\app\Services\Auth\AcbrAuthService;
 use Illuminate\Http\Client\PendingRequest;
-use Modules\Dfe\app\Contracts\CnpjProviderInterface;
+use Modules\Dfe\app\Contracts\CnpjClientInterface;
+use App\Traits\ExternalApiRequestTrait;
 use App\Exceptions\ApiException;
 
-class CnpjAcbrClient extends BaseClient implements CnpjProviderInterface
+class CnpjClient extends BaseClient implements CnpjClientInterface
 {
+    use ExternalApiRequestTrait;
+
     public function __construct(private string $environment, private AcbrAuthService $auth)
     {
         parent::__construct(config("dfe.acbr.{$this->environment}.base_url"));
@@ -25,7 +28,7 @@ class CnpjAcbrClient extends BaseClient implements CnpjProviderInterface
             ->withToken($token);
     }
 
-    public function fetch(string $cnpj): array
+    /*public function fetch(string $cnpj): array
     {
         try {
             $response = $this->getClient()->get("/cnpj/{$cnpj}");
@@ -51,5 +54,12 @@ class CnpjAcbrClient extends BaseClient implements CnpjProviderInterface
         }
 
         return $response->json();
+    }*/
+
+    public function fetch(string $cnpj): array
+    {
+        return $this->performRequest(function () use ($cnpj) {
+            return $this->getClient()->get("/cnpj/{$cnpj}");
+        });
     }
 }

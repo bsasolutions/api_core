@@ -2,7 +2,7 @@
 
 namespace Modules\Dfe\app\Contracts;
 
-interface CnpjProviderInterface
+interface CnpjClientInterface
 {
     public function fetch(string $cnpj): array;
 }

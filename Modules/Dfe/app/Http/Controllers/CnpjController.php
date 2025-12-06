@@ -8,11 +8,6 @@ use Modules\Dfe\app\Services\CnpjService;
 
 class CnpjController extends ApiController
 {
-    public function index()
-    {
-        return $this->successResponse(['auto', ['route' => ':route']], 200);
-    }
-
     public function show(Request $request, string $cnpj, CnpjService $service)
     {
         $environment = $request->header('X-Env');

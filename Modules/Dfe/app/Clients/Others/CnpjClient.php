@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Modules\Dfe\app\Clients;
+namespace Modules\Dfe\app\Clients\Others;
 
 use App\Clients\BaseClient;
 use Illuminate\Http\Client\PendingRequest;
-use Modules\Dfe\app\Contracts\CnpjProviderInterface;
+use Modules\Dfe\app\Contracts\CnpjClientInterface;
 
-class CnpjOtherClient extends BaseClient implements CnpjProviderInterface
+class CnpjClient extends BaseClient implements CnpjClientInterface
 {
 
     public function __construct()
