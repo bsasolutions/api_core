@@ -13,7 +13,11 @@ class CnpjController extends ApiController
         $environment = $request->header('X-Env');
         $provider    = $request->header('X-Provider');
 
-        $data = $service->fetch($cnpj, $provider, $environment);
+        $data = $service->fetch(
+            cnpj: $cnpj,
+            provider: $provider,
+            environment: $environment
+        );
 
         return $this->successResponse('dfe.cnpj.success', 200, [], $data);
     }
