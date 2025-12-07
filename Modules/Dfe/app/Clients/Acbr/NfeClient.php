@@ -50,6 +50,7 @@ class NfeClient extends BaseClient implements NfeClientInterface
 
     public function emit(array $data): array
     {
+        app(Emit\EmitNfe::class)->execute($this, $data);
         throw new ApiException(['auto', ["Class" =>  class_basename(__CLASS__)]]);
     }
 
@@ -58,7 +59,7 @@ class NfeClient extends BaseClient implements NfeClientInterface
         $type = $data['type_document'] ?? null;
 
         if (!$type) {
-            throw new ApiException([$data['action']], 400); //'dfe.nfe.missing_type_document'
+            throw new ApiException(['auto', ["Class" =>  class_basename(__CLASS__)]]);
         }
 
         return match ($type) {

@@ -16,10 +16,8 @@ class NfeController extends ApiController
         $provider    = $request->header('X-Provider');
 
         $validated = $request->validate([
-            //'action' => 'required|string',
             'action' => ['required', 'string', Rule::in(collect(NfeActions::cases())->map(fn($c) => $c->value))],
             'payload' => 'required|array',
-            //'payload.type_document' => 'required|string|in:nfe,cce,cancel,event,inutilize'
             'payload.type_document' => ['required', 'string', Rule::in(['nfe', 'cce', 'cancel', 'event', 'inutilize'])]
         ]);
 
