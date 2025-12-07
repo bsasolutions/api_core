@@ -50,7 +50,7 @@ class NfeClient extends BaseClient implements NfeClientInterface
 
     public function emit(array $data): array
     {
-        throw new ApiException(['auto']);
+        throw new ApiException(['auto', ["Class" =>  class_basename(__CLASS__)]]);
     }
 
     public function consult(array $data): array
@@ -73,25 +73,25 @@ class NfeClient extends BaseClient implements NfeClientInterface
 
     public function cancel(array $data): array
     {
-        throw new ApiException(['auto']);
+        throw new ApiException(['auto', ["Class" =>  class_basename(__CLASS__)]]);
     }
 
     public function cce(array $data): array
     {
-        throw new ApiException(['auto']);
+        throw new ApiException(['auto', ["Class" =>  class_basename(__CLASS__)]]);
     }
     public function inutilize(array $data): array
     {
-        throw new ApiException(['auto']);
+        throw new ApiException(['auto', ["Class" =>  class_basename(__CLASS__)]]);
     }
 
     public function getXml(array $data): array
     {
-        throw new ApiException(['auto']);
+        throw new ApiException(['auto', ["Class" =>  class_basename(__CLASS__)]]);
     }
     public function getPdf(array $data): array
     {
-        throw new ApiException(['auto']);
+        throw new ApiException(['auto', ["Class" =>  class_basename(__CLASS__)]]);
     }
 
     public function request(string $method, string $url, array $data = []): array

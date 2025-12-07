@@ -9,6 +9,6 @@ class ConsultEvent
 {
     public function execute(NfeClient $client, array $data): array
     {
-        throw new ApiException(['auto']);
+        throw new ApiException(['auto', ["Class" =>  class_basename(__CLASS__)]]);
     }
 }
