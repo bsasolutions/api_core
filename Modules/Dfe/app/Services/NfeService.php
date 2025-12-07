@@ -2,8 +2,8 @@
 
 namespace Modules\Dfe\app\Services;
 
-use Modules\Dfe\app\Enums\NfeActions;
 use Modules\Dfe\app\Factories\NfeFactory;
+use App\Exceptions\ApiException;
 
 class NfeService
 {

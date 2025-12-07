@@ -42,11 +42,13 @@ trait ApiResponseTrait
         // Note: core.base.welcome -> core/base.welcome
         // Auto generate key: core.base.welcome
         if ($message === 'auto' || (is_array($message) && $message[0] === 'auto')) {
+            //return json_encode($message) . ' - ' . $key . ' - ' . json_encode($placeholders);
             $uri    = request()->route()->uri();
             $uri = preg_replace('/\{.*?\}/', '', $uri);
             $uri = trim($uri, '/');
             $method = request()->route()->getActionMethod();
             $key    = str_replace('/', '.', $uri) . '.' . $method;
+            $key = preg_replace('/\./', '/', $key, 1);
 
             $placeholders = is_array($message) ? ($message[1] ?? []) : [];
             if (($placeholders['route'] ?? null) === ':route') {
@@ -54,7 +56,6 @@ trait ApiResponseTrait
             }
 
             if (Lang::has($key)) {
-                $key = preg_replace('/\./', '/', $key, 1);
                 return __($key, $placeholders);
             }
 
@@ -63,24 +64,21 @@ trait ApiResponseTrait
 
         // Array: ['core.base.welcome', ['name' => 'John']]
         if (is_array($message)) {
-            [$key, $placeholders] = $message + [null, []];
+            $key = $message[0] ?? null;
+            $key = preg_replace('/\./', '/', $key, 1);
+            $placeholders = $message[1] ?? [];
 
-            if (is_string($key)) {
-                if (Lang::has($key)) {
-                    $key = preg_replace('/\./', '/', $key, 1);
-                    return __($key, $placeholders);
-                }
-
-                return $key . $this->formatPlaceholdersFallback($placeholders);
+            if (is_string($key) && Lang::has($key)) {
+                return __($key, $placeholders);
             }
 
-            return (string) json_encode($message, JSON_UNESCAPED_UNICODE);
+            return $key ? $key . $this->formatPlaceholdersFallback($placeholders) : json_encode($message, JSON_UNESCAPED_UNICODE);
         }
 
         // String lang.key: "core.base.welcome"
         if ((str_contains($message, '.')) && (!str_contains($message, ' ')) && (preg_match('/^[a-z0-9._\/-]+$/i', $message))) {
-            $message = preg_replace('/\./', '/', $message, 1);
-            return __($message);
+            $key = preg_replace('/\./', '/', $message, 1);
+            return __($key);
         }
 
         // String text: "Welcome John"

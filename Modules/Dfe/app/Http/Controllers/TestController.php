@@ -28,11 +28,12 @@ class TestController extends ApiController
         // The parameter :route always includes uri + method in ApiResponseTrait
         // 1: Auto translation → Try to translate automatically using rotation
         // 2: With parameter → Send key and parameters to lang
-        // 3: Without parameter → Send key to lang
-        // 4: Static text → Static text
+        // 3: Without parameter → Send key by string
+        // 4: Without parameter → Send key by array
         // 5: Throw exception → Sends key, static text, or auto. Does not accept parameters
         // 6: Throw ApiException → Custom throw to accept parameters
-        // 7: Simple response → It does not format with ApiResponseTrait
+        // 7: Static text → It does not format with ApiResponseTrait
+        // 0: Simple response → It does not format with ApiResponseTrait
         if ($id == 1)
             return $this->successResponse(['auto', ['id' => $id, 'type' => 'auto_translation']]);
         else if ($id == 2)
@@ -40,14 +41,14 @@ class TestController extends ApiController
         else if ($id == 3)
             return $this->successResponse('dfe.test.show');
         else if ($id == 4)
-            return $this->successResponse('Module Dfe Route Test Method Show');
+            return $this->successResponse(['dfe.test.show']);
         else if ($id == 5)
             throw new RuntimeException('auto');
         else if ($id == 6)
             throw new ApiException(['dfe.test.show', ['route' => 'dfe/test → show', 'id' => $id, 'type' => 'Throw_ApiException']]);
         else if ($id == 7)
-            return response()->json([__('dfe/test.show')]);
+            return $this->successResponse('Module Dfe Route Test Method Show');
         else
-            return $this->successResponse('dfe.test.show');
+            return response()->json([__('dfe/test.show')]);
     }
 }

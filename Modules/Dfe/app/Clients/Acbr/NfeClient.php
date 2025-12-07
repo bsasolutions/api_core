@@ -58,7 +58,7 @@ class NfeClient extends BaseClient implements NfeClientInterface
         $type = $data['type_document'] ?? null;
 
         if (!$type) {
-            throw new ApiException(['dfe.nfe.missing_type_document'], 400);
+            throw new ApiException([$data['action']], 400); //'dfe.nfe.missing_type_document'
         }
 
         return match ($type) {

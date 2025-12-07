@@ -2,6 +2,7 @@
 
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Foundation\Configuration\Middleware;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
@@ -25,6 +26,11 @@ return Application::configure(basePath: dirname(__DIR__))
             return response()->json([
                 'message' => $e->getMessage() ?: 'HTTP error',
             ], $e->getStatusCode());
+        });
+
+        // Validation requests
+        $exceptions->renderable(function (ValidationException $e, $request) {
+            return (new \App\Exceptions\Renderers\ValidationExceptionRenderer())->render($e, $request);
         });
 
         // Filesystem permission errors

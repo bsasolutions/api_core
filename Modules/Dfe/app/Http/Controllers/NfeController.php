@@ -15,14 +15,14 @@ class NfeController extends ApiController
 
         $validated = $request->validate([
             'action' => 'required|string',
-            'payload' => 'array'
+            'payload' => 'required|array'
         ]);
 
         $data = $service->handle(
-            $validated['action'],
-            $validated['payload'] ?? [],
-            $provider,
-            $environment
+            action: $validated['action'],
+            payload: $validated['payload'],
+            provider: $provider,
+            environment: $environment
         );
 
         return $this->successResponse('dfe.nfe.success', 200, [], $data);
