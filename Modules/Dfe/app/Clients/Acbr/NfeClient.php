@@ -48,57 +48,56 @@ class NfeClient extends BaseClient implements NfeClientInterface
         };
     }
 
-    public function emit(array $data): array
+    public function emit(array $payload): array
     {
-        app(Emit\EmitNfe::class)->execute($this, $data);
-        throw new ApiException(['auto', ["Class" =>  class_basename(__CLASS__)]]);
+        return app(Emit\EmitNfe::class)->execute($this, $payload);
     }
 
-    public function consult(array $data): array
+    public function consult(array $payload): array
     {
-        $type = $data['type_document'] ?? null;
+        $type = $payload['type_document'] ?? null;
 
         if (!$type) {
             throw new ApiException(['auto', ["Class" =>  class_basename(__CLASS__)]]);
         }
 
         return match ($type) {
-            'nfe'       => app(Consult\ConsultNfe::class)->execute($this, $data),
-            'cce'       => app(Consult\ConsultCce::class)->execute($this, $data),
-            'cancel'    => app(Consult\ConsultCancel::class)->execute($this, $data),
-            'event'     => app(Consult\ConsultEvent::class)->execute($this, $data),
-            'inutilize' => app(Consult\ConsultInutilize::class)->execute($this, $data),
+            'nfe'       => app(Consult\ConsultNfe::class)->execute($this, $payload),
+            'cce'       => app(Consult\ConsultCce::class)->execute($this, $payload),
+            'cancel'    => app(Consult\ConsultCancel::class)->execute($this, $payload),
+            'event'     => app(Consult\ConsultEvent::class)->execute($this, $payload),
+            'inutilize' => app(Consult\ConsultInutilize::class)->execute($this, $payload),
             default     => throw new ApiException(['dfe.nfe.invalid_type_document'], 400)
         };
     }
 
-    public function cancel(array $data): array
+    public function cancel(array $payload): array
     {
         throw new ApiException(['auto', ["Class" =>  class_basename(__CLASS__)]]);
     }
 
-    public function cce(array $data): array
+    public function cce(array $payload): array
     {
         throw new ApiException(['auto', ["Class" =>  class_basename(__CLASS__)]]);
     }
-    public function inutilize(array $data): array
-    {
-        throw new ApiException(['auto', ["Class" =>  class_basename(__CLASS__)]]);
-    }
-
-    public function getXml(array $data): array
-    {
-        throw new ApiException(['auto', ["Class" =>  class_basename(__CLASS__)]]);
-    }
-    public function getPdf(array $data): array
+    public function inutilize(array $payload): array
     {
         throw new ApiException(['auto', ["Class" =>  class_basename(__CLASS__)]]);
     }
 
-    public function request(string $method, string $url, array $data = []): array
+    public function getXml(array $payload): array
+    {
+        throw new ApiException(['auto', ["Class" =>  class_basename(__CLASS__)]]);
+    }
+    public function getPdf(array $payload): array
+    {
+        throw new ApiException(['auto', ["Class" =>  class_basename(__CLASS__)]]);
+    }
+
+    public function request(string $method, string $url, array $payload = []): array
     {
         return $this->performRequest(
-            fn() => $this->getClient()->{$method}($url, $data)
+            fn() => $this->getClient()->{$method}($url, $payload)
         );
     }
 }

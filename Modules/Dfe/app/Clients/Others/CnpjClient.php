@@ -10,7 +10,6 @@ use Modules\Dfe\app\Contracts\CnpjClientInterface;
 
 class CnpjClient extends BaseClient implements CnpjClientInterface
 {
-
     public function __construct()
     {
         parent::__construct(config('dfe.other.homolog.base_url'));
@@ -18,8 +17,10 @@ class CnpjClient extends BaseClient implements CnpjClientInterface
 
     protected function getClient(): PendingRequest
     {
-        //! Example with Headers directly: return $this->getHttpInstance()->withHeaders(['apikey' => $this->apiKey,'Content-Type' => 'application/json',]);
-        //! Example using a parameter in BaseClient: return $this->getHttpInstance([''apikey' => $this->apiKey, 'Content-Type' => 'application/json',])->withToken(config('services.other.token'));
+        //! Example with Headers directly:
+        // return $this->getHttpInstance()->withHeaders(['apikey' => $this->apiKey,'Content-Type' => 'application/json',]);
+        //! Example using a parameter in BaseClient:
+        // return $this->getHttpInstance([''apikey' => $this->apiKey, 'Content-Type' => 'application/json',])->withToken(config('services.other.token'));
         return $this->getHttpInstance()
             ->withToken(config('dfe.other.homolog.token'));
     }
@@ -36,9 +37,8 @@ class CnpjClient extends BaseClient implements CnpjClientInterface
             'cnpj' => $cnpj
         ];
 
-        //! Example using dynamic baseUrl: $this->setBaseUrl($baseUrl);
-        return $this->getClient()
-            ->get("/cnpj/{$cnpj}")
-            ->json();
+        //! Example using dynamic baseUrl:
+        // $this->setBaseUrl($baseUrl);
+        return $this->getClient()->get("/cnpj/{$cnpj}");
     }
 }

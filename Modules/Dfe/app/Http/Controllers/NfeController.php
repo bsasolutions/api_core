@@ -14,12 +14,18 @@ class NfeController extends ApiController
     {
         $environment = $request->header('X-Env');
         $provider    = $request->header('X-Provider');
+        $action = $request->input('action');
 
-        $validated = $request->validate([
-            'action' => ['required', 'string', Rule::in(collect(NfeActions::cases())->map(fn($c) => $c->value))],
+        $rules = [
+            'action' => ['required', 'string', Rule::in(collect(NfeActions::cases())->map(fn($c) => $c->value)->all())],
             'payload' => 'required|array',
-            'payload.type_document' => ['required', 'string', Rule::in(['nfe', 'cce', 'cancel', 'event', 'inutilize'])]
-        ]);
+        ];
+
+        if ($action === 'consult') {
+            $rules['payload.type_document'] = ['required', 'string', Rule::in(['nfe', 'cce', 'cancel', 'event', 'inutilize'])];
+        }
+
+        $validated = $request->validate($rules);
 
         $data = $service->handle(
             action: $validated['action'],

@@ -22,7 +22,9 @@ class AcbrAuthService
         $cacheKey = "acbr_api_token_{$environment}";
 
         if (Cache::has($cacheKey)) {
-            return Cache::get($cacheKey);
+            $token = Cache::get($cacheKey);
+            //! Debug token: $parts = explode('.', $token); $payload = json_decode(base64_decode($parts[1]), true); throw new RuntimeException("TOKEN CACHE ACBr ($environment): "  . ($payload['iat'] ?? 'sem iat') . ' - ' . ($payload['exp'] ?? 'sem exp') . ' - ' . $token);
+            return $token;
         }
 
         try {

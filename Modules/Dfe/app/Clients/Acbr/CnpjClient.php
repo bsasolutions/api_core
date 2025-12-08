@@ -9,7 +9,6 @@ use Modules\Dfe\app\Services\Auth\AcbrAuthService;
 use Illuminate\Http\Client\PendingRequest;
 use Modules\Dfe\app\Contracts\CnpjClientInterface;
 use App\Traits\ExternalApiRequestTrait;
-use App\Exceptions\ApiException;
 
 class CnpjClient extends BaseClient implements CnpjClientInterface
 {
@@ -28,36 +27,9 @@ class CnpjClient extends BaseClient implements CnpjClientInterface
             ->withToken($token);
     }
 
-    /*public function fetch(string $cnpj): array
-    {
-        try {
-            $response = $this->getClient()->get("/cnpj/{$cnpj}");
-        } catch (\Illuminate\Http\Client\RequestException $e) {
-
-            $status = $e->response?->status();
-
-            if ($status === 401) {
-                $response = $e->response;
-            } else {
-                $data = $e->response ? $e->response->json() : null;
-
-                throw new ApiException(
-                    ['dfe.cnpj.external_error', ['details' => $data['error']['message'] ?? 'dfe.cnpj.external_empty']],
-                    $e->response?->status() ?? 400
-                );
-            }
-        }
-
-        if ($response->status() === 401) {
-            $this->auth->clearTokenCache($this->environment);
-            $response = $this->getClient()->get("/cnpj/{$cnpj}");
-        }
-
-        return $response->json();
-    }*/
-
     public function fetch(string $cnpj): array
     {
+        //! Clear token cache: $this->auth->clearTokenCache($this->environment);
         return $this->performRequest(function () use ($cnpj) {
             return $this->getClient()->get("/cnpj/{$cnpj}");
         });
