@@ -1,18 +1,7 @@
-# API_CORE
+# API_CORE → pacote reutilizável para utilizar em outros projects
 #. Notes | Comments | Highlights
     -
 #! Fixme | Bug | Optimize | Temp | Review
     -
 #? Draft | Doubt | Suggestion | Feature
     -
-
-#[Use]
-    # Push tags
-        git tag v1.0.0
-        git push origin v1.0.0
-    # Install package in consumer
-        composer config repositories.bsa-core vcs https://github.com/bsasolutions/api_core.git
-        without tags: composer require bsa/api-core:dev-NomeBranch
-        with tags: composer require bsa/api-core:^1.0
-    # Update package in consumer
-        composer update bsa/api-core
