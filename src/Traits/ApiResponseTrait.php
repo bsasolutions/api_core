@@ -55,8 +55,8 @@ trait ApiResponseTrait
                 $placeholders['route'] = $key;
             }
 
-            if (Lang::has('bsa_core::' . $key)) {
-                return __('bsa_core::' . $key, $placeholders);
+            if (Lang::has($key)) {
+                return __($key, $placeholders);
             }
 
             return $key . $this->formatPlaceholdersFallback($placeholders);
@@ -68,8 +68,8 @@ trait ApiResponseTrait
             //$key = preg_replace('/\./', '/', $key, 1);
             $placeholders = $message[1] ?? [];
 
-            if (is_string($key) && Lang::has('bsa_core::' . $key)) {
-                return __('bsa_core::' . $key, $placeholders);
+            if (is_string($key) && Lang::has($key)) {
+                return __($key, $placeholders);
             }
 
             return $key ? $key . $this->formatPlaceholdersFallback($placeholders) : json_encode($message, JSON_UNESCAPED_UNICODE);
@@ -79,7 +79,7 @@ trait ApiResponseTrait
         if ((str_contains($message, '.')) && (!str_contains($message, ' ')) && (preg_match('/^[a-z0-9._\/-]+$/i', $message))) {
             //$key = preg_replace('/\./', '/', $message, 1);
             $key = $message;
-            return __('bsa_core::' . $key);
+            return __($key);
         }
 
         // String text: "Welcome John"
