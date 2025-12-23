@@ -15,6 +15,12 @@ class CoreServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        // Publish config, load routes if needed;
+        // Register translations for the package
+        $this->loadTranslationsFrom(__DIR__ . '/../resources/lang', 'bsa_core');
+
+        // Opcional: Allow package translations to be published
+        $this->publishes([
+            __DIR__ . '/../resources/lang' => resource_path('lang/vendor/bsa_core'),
+        ], 'bsa_core-lang');
     }
 }

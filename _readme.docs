@@ -6,11 +6,13 @@
 #? Draft | Doubt | Suggestion | Feature
     -
 
-#[Git_Packs]
+#[Use]
+    # Push with tag
     git tag v1.0.0
     git push origin v1.0.0
-
-#[User_Core]
+    # Install package in consumer
     composer config repositories.bsa-core vcs https://github.com/bsasolutions/api_core.git
-    composer require bsa/api-core:^1.0;
-
+    composer require bsa/api-core:^1.0
+    Atualizar para últmmo commit: composer require bsa/api-core:dev-NomeBranch
+    # Updata package in consumer
+    composer update bsa/api-core
