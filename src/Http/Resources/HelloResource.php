@@ -10,4 +10,8 @@ class HelloResource
     {
         return 'Hello Core';
     }
+    public static function bye(): string
+    {
+        return 'Bye Core';
+    }
 }
