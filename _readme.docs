@@ -7,12 +7,12 @@
     -
 
 #[Use]
-    # Push with tag
-    git tag v1.0.0
-    git push origin v1.0.0
+    # Push tags
+        git tag v1.0.0
+        git push origin v1.0.0
     # Install package in consumer
-    composer config repositories.bsa-core vcs https://github.com/bsasolutions/api_core.git
-    composer require bsa/api-core:^1.0 #"bsa/api-core": "^1.0",
-    Atualizar para últmmo commit: composer require bsa/api-core:dev-NomeBranch # "bsa/api-core": "dev-main"
-    # Updata package in consumer
-    composer update bsa/api-core
+        composer config repositories.bsa-core vcs https://github.com/bsasolutions/api_core.git
+        without tags: composer require bsa/api-core:dev-NomeBranch
+        with tags: composer require bsa/api-core:^1.0
+    # Update package in consumer
+        composer update bsa/api-core
