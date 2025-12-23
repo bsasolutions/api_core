@@ -48,38 +48,49 @@ trait ApiResponseTrait
             $uri = trim($uri, '/');
             $method = request()->route()->getActionMethod();
             $key    = str_replace('/', '.', $uri) . '.' . $method;
-            //$key = preg_replace('/\./', '/', $key, 1);
+            $key = preg_replace('/\./', '/', $key, 1);
 
             $placeholders = is_array($message) ? ($message[1] ?? []) : [];
             if (($placeholders['route'] ?? null) === ':route') {
                 $placeholders['route'] = $key;
             }
 
+            // Custom or package or fallback
             if (Lang::has($key)) {
                 return __($key, $placeholders);
             }
-
+            if (Lang::has('bsa_core::' . $key)) {
+                return __('bsa_core::' . $key, $placeholders);
+            }
             return $key . $this->formatPlaceholdersFallback($placeholders);
         }
 
         // Array: ['core.base.welcome', ['name' => 'John']]
         if (is_array($message)) {
             $key = $message[0] ?? null;
-            //$key = preg_replace('/\./', '/', $key, 1);
+            $key = preg_replace('/\./', '/', $key, 1);
             $placeholders = $message[1] ?? [];
 
+            // Custom or package or fallback
             if (is_string($key) && Lang::has($key)) {
                 return __($key, $placeholders);
             }
-
+            if (is_string($key) && Lang::has('bsa_core::' . $key)) {
+                return __('bsa_core::' . $key, $placeholders);
+            }
             return $key ? $key . $this->formatPlaceholdersFallback($placeholders) : json_encode($message, JSON_UNESCAPED_UNICODE);
         }
 
         // String lang.key: "core.base.welcome"
         if ((str_contains($message, '.')) && (!str_contains($message, ' ')) && (preg_match('/^[a-z0-9._\/-]+$/i', $message))) {
-            //$key = preg_replace('/\./', '/', $message, 1);
-            $key = $message;
-            return __($key);
+            $key = preg_replace('/\./', '/', $message, 1);
+
+            if (Lang::has($key)) {
+                return __($key);
+            }
+            if (Lang::has('bsa_core::' . $key)) {
+                return __('bsa_core::' . $key);
+            }
         }
 
         // String text: "Welcome John"
