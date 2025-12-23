@@ -48,7 +48,7 @@ trait ApiResponseTrait
             $uri = trim($uri, '/');
             $method = request()->route()->getActionMethod();
             $key    = str_replace('/', '.', $uri) . '.' . $method;
-            $key = preg_replace('/\./', '/', $key, 1);
+            //$key = preg_replace('/\./', '/', $key, 1);
 
             $placeholders = is_array($message) ? ($message[1] ?? []) : [];
             if (($placeholders['route'] ?? null) === ':route') {
@@ -65,7 +65,7 @@ trait ApiResponseTrait
         // Array: ['core.base.welcome', ['name' => 'John']]
         if (is_array($message)) {
             $key = $message[0] ?? null;
-            $key = preg_replace('/\./', '/', $key, 1);
+            //$key = preg_replace('/\./', '/', $key, 1);
             $placeholders = $message[1] ?? [];
 
             if (is_string($key) && Lang::has('bsa_core::' . $key)) {
@@ -77,7 +77,8 @@ trait ApiResponseTrait
 
         // String lang.key: "core.base.welcome"
         if ((str_contains($message, '.')) && (!str_contains($message, ' ')) && (preg_match('/^[a-z0-9._\/-]+$/i', $message))) {
-            $key = preg_replace('/\./', '/', $message, 1);
+            //$key = preg_replace('/\./', '/', $message, 1);
+            $key = $message;
             return __('bsa_core::' . $key);
         }
 
